@@ -1,57 +1,13 @@
-# ==========
-# Secrets
-# ==========
-.env
-.env.*
-*.key
-*.pem
-
-# ==========
-# Python
-# ==========
 __pycache__/
-*.py[cod]
-*.pyd
+*.pyc
 *.pyo
-*.so
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.coverage
-htmlcov/
-
-# ==========
-# Virtualenvs
-# ==========
-.venv/
-venv/
-ENV/
-env/
-
-# ==========
-# Poetry
-# ==========
-# (poetry.lock geralmente É recomendado versionar; então NÃO ignoramos)
-
-# ==========
-# IDE / Editor
-# ==========
-.vscode/
-.idea/
-
-# ==========
-# OS
-# ==========
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# ==========
-# Logs
-# ==========
-*.log
-
-# ==========
-# Database / local files
-# ==========
+*.pyd
+.env
+.venv
+.env.*
 *.sqlite3
+.idea
+.vscode
+dist
+build
+*.egg-info
