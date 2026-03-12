@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 
 from .database import Base, engine, get_db
 from . import models, schemas, crud
+from .security import create_access_token
+from .schemas import LoginRequest, Token
 
 app = FastAPI(title="Task Manager API")
 
@@ -26,8 +28,8 @@ def register_user(payload: schemas.UserCreate, db: Session = Depends(get_db)):
     user = crud.create_user(db, email=payload.email, password=payload.password)
     return user
 
-@app.post("/login")
-def login(payload: schemas.LoginRequest, db: Session = Depends(get_db)):
+@app.post("/login", response_model=Token)
+def login(payload: LoginRequest, db: Session = Depends(get_db)):
     user = crud.authenticate_user(db, payload.email, payload.password)
 
     if not user:
@@ -36,4 +38,6 @@ def login(payload: schemas.LoginRequest, db: Session = Depends(get_db)):
             detail="Email ou senha inválidos",
         )
     
-    return {"message": "Login realizado com sucesso"}
+    token = create_access_token({"sub": user.email})
+    
+    return {"access_token": token, "token_type": "bearer"}
