@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from . import models
-from .security import hash_password
+from .security import hash_password, verify_password
 
 
 def get_user_by_email(db: Session, email: str) -> models.User | None:
@@ -16,4 +16,15 @@ def create_user(db: Session, email: str, password: str) -> models.User:
     db.add(user)
     db.commit()
     db.refresh(user)
+    return user
+
+def authenticate_user(db: Session, email: str, password: str) -> models.User | None:
+    user = get_user_by_email(db, email)
+
+    if not user:
+        return None
+    
+    if not verify_password(password, user.hashed_password):
+        return None
+    
     return user

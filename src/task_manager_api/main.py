@@ -23,5 +23,17 @@ def register_user(payload: schemas.UserCreate, db: Session = Depends(get_db)):
             detail="E-mail já cadastrado",
         )
     
-    user = crud.create_user(db, email=payload.password)
+    user = crud.create_user(db, email=payload.email, password=payload.password)
     return user
+
+@app.post("/login")
+def login(payload: schemas.LoginRequest, db: Session = Depends(get_db)):
+    user = crud.authenticate_user(db, payload.email, payload.password)
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Email ou senha inválidos",
+        )
+    
+    return {"message": "Login realizado com sucesso"}
