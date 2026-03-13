@@ -16,7 +16,6 @@ Base.metadata.create_all(bind=engine)
 def root():
     return {"message": "Task Manager API is running"}
 
-
 @app.post("/users", response_model=schemas.UserResponse, status_code=status.HTTP_201_CREATED)
 def register_user(payload: schemas.UserCreate, db: Session = Depends(get_db)):
     existing = crud.get_user_by_email(db, payload.email)
@@ -43,11 +42,9 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     
     return {"access_token": token, "token_type": "bearer"}
 
-
 @app.get("/me", response_model=schemas.UserResponse)
 def read_me(current_user: models.User = Depends(get_current_user)):
     return current_user
-
 
 @app.post("/tasks", response_model=schemas.TaskResponse)
 def create_task(
@@ -67,3 +64,35 @@ def list_tasks(
     tasks = crud. get_tasks_by_user(db, current_user.id)
 
     return tasks
+
+@app.put("/tasks/{task_id}", response_model=schemas.TaskResponse)
+def update_task(
+    task_id: int,
+    payload: schemas.TaskUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    task = crud.get_task(db, task_id)
+
+    if not task or task.owner_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Task não encontrada")
+    
+    updated = crud.update_task(db, task, payload)
+
+    return updated
+
+@app.delete("/tasks/{task_id}")
+def delete_task(
+    task_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    
+    task = crud.get_task(db, task_id)
+
+    if not task or task.owner_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Task não encontrada")
+    
+    crud.delete_task(db, task)
+
+    return {"message": "Task deletada"}

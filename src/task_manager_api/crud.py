@@ -44,4 +44,30 @@ def create_task(db: Session,user_id: int, task: schemas.TaskCreate):
     return db_task
 
 def get_tasks_by_user(db: Session, user_id: int):
+
     return db.query(models.Task).filter(models.Task.owner_id == user_id).all()
+
+def get_task(db: Session, task_id: int):
+
+    return db.query(models.Task).filter(models.Task.id == task_id).first()
+
+def update_task(db:Session, task: models.Task, payload: schemas.TaskUpdate):
+
+    if payload.title is not None:
+        task.title = payload.title
+
+    if payload.description is not None:
+        task.description = payload.description
+
+    if payload.completed is not None:
+        task.completed = payload.completed
+
+    db.commit()
+    db.refresh(task)
+
+    return task
+
+def delete_task(db: Session, task: models.Task):
+
+    db.delete(task)
+    db.commit()
