@@ -1,9 +1,10 @@
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordRequestForm
 
 from .database import Base, engine, get_db
 from . import models, schemas, crud
-from .security import create_access_token
+from .security import create_access_token, get_current_user
 from .schemas import LoginRequest, Token
 
 app = FastAPI(title="Task Manager API")
@@ -29,8 +30,8 @@ def register_user(payload: schemas.UserCreate, db: Session = Depends(get_db)):
     return user
 
 @app.post("/login", response_model=Token)
-def login(payload: LoginRequest, db: Session = Depends(get_db)):
-    user = crud.authenticate_user(db, payload.email, payload.password)
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = crud.authenticate_user(db, form_data.username, form_data.password)
 
     if not user:
         raise HTTPException(
@@ -41,3 +42,8 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
     token = create_access_token({"sub": user.email})
     
     return {"access_token": token, "token_type": "bearer"}
+
+
+@app.get("/me", response_model=schemas.UserResponse)
+def read_me(current_user: models.User = Depends(get_current_user)):
+    return current_user
