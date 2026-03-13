@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from . import models
+from . import models, schemas
 from .security import hash_password, verify_password
 
 
@@ -28,3 +28,20 @@ def authenticate_user(db: Session, email: str, password: str) -> models.User | N
         return None
     
     return user
+
+def create_task(db: Session,user_id: int, task: schemas.TaskCreate):
+
+    db_task = models.Task(
+        title=task.title,
+        description=task.description,
+        owner_id=user_id
+    )
+
+    db.add(db_task)
+    db.commit()
+    db.refresh(db_task)
+
+    return db_task
+
+def get_tasks_by_user(db: Session, user_id: int):
+    return db.query(models.Task).filter(models.Task.owner_id == user_id).all()

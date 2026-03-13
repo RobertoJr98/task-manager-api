@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 class UserCreate(BaseModel):
     email: EmailStr
@@ -20,3 +21,16 @@ class LoginRequest(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+class TaskCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+
+class TaskResponse(BaseModel):
+    id: int
+    title: str
+    description: Optional[str]
+    completed: bool
+
+    class Config:
+        orm_mode = True

@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
-
+from typing import List
 from .database import Base, engine, get_db
 from . import models, schemas, crud
 from .security import create_access_token, get_current_user
@@ -47,3 +47,23 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 @app.get("/me", response_model=schemas.UserResponse)
 def read_me(current_user: models.User = Depends(get_current_user)):
     return current_user
+
+
+@app.post("/tasks", response_model=schemas.TaskResponse)
+def create_task(
+    payload: schemas.TaskCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    task = crud.create_task(db, current_user.id, payload)
+
+    return task
+
+@app.get("/tasks", response_model=List[schemas.TaskResponse])
+def list_tasks(
+    db: Session = Depends(get_db),
+    current_user: models.User =Depends(get_current_user)
+):
+    tasks = crud. get_tasks_by_user(db, current_user.id)
+
+    return tasks
