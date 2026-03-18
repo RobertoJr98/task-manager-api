@@ -1,13 +1,21 @@
+# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# Virtualenv
 .env
 .venv
-.env.*
-*.sqlite3
-.idea
-.vscode
-dist
-build
-*.egg-info
+
+# Poetry
+poetry.lock
+
+# Database
+*.db
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
