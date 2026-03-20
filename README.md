@@ -4,6 +4,14 @@ API RESTful para gerenciamento de tarefas com autenticação de usuários, desen
 
 ---
 
+## 📷 Preview da API
+
+![Swagger UI](docs.png)
+
+> Interface interativa gerada automaticamente pelo FastAPI
+
+---
+
 ## 📌 Sobre o Projeto
 
 O **Task Manager API** é um sistema backend que permite:
