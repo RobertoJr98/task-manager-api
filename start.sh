@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 exec poetry run uvicorn app.main:app --host 0.0.0.0 --port $PORT
