@@ -15,7 +15,8 @@ engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
     echo=DEBUG,
-    future = True
+    future = True,
+    connect_args={"sslmode": "require"} if "postgresql" in DATABASE_URL else{}
     )
 
 SessionLocal = sessionmaker(
