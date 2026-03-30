@@ -5,9 +5,6 @@ from app.routers import tasks, auth
 #Inicializa a aplicação FastAPI
 app = FastAPI(title="Task Manager API")
 
-#Cria tabelas no banco de dados
-Base.metadata.create_all(bind=engine)
-
 #Registra os routers
 app.include_router(auth.router)
 app.include_router(tasks.router)
