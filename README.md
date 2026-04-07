@@ -1,6 +1,15 @@
 # 🚀 Task Manager API
 
-API RESTful para gerenciamento de tarefas com autenticação de usuários, desenvolvida com foco em boas práticas de backend e pronta para uso em portfólio profissional.
+API RESTful para gerenciamento de tarefas com autenticação de usuários, desenvolvida com foco em boas práticas de backend e pronta para uso em produção.
+
+---
+
+## 🌐 Deploy
+
+🔗 https://task-manager-api-7o0u.onrender.com  
+
+📄 Documentação interativa (Swagger):  
+👉 https://task-manager-api-7o0u.onrender.com/docs  
 
 ---
 
@@ -8,155 +17,139 @@ API RESTful para gerenciamento de tarefas com autenticação de usuários, desen
 
 ![Swagger UI](docs.png)
 
-> Interface interativa gerada automaticamente pelo FastAPI
+---
+
+## ⚙️ Tecnologias
+
+- Python
+- FastAPI
+- SQLAlchemy
+- PostgreSQL
+- Alembic (migrations)
+- JWT Authentication
+- Render (deploy)
 
 ---
 
-## 📌 Sobre o Projeto
+## 🔐 Funcionalidades
 
-O **Task Manager API** é um sistema backend que permite:
-
-* Cadastro de usuários
-* Autenticação via token (JWT)
-* Gerenciamento de tarefas (CRUD)
-* Associação de tarefas a usuários
-
-Este projeto foi desenvolvido com foco em:
-
-* Estrutura profissional de backend
-* Separação de responsabilidades (routers, schemas, crud)
-* Boas práticas com FastAPI
-* Preparação para ambiente real de produção
+- Cadastro de usuário
+- Login com autenticação JWT
+- Endpoint protegido (`/auth/me`)
+- CRUD completo de tarefas
+- Relacionamento usuário ↔ tarefas
+- Proteção de rotas com autenticação
+- Validação de dados com Pydantic
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 📌 Endpoints principais
 
-* Python 3.13
-* FastAPI
-* SQLAlchemy
-* Pydantic v2
-* SQLite (desenvolvimento)
-* Poetry (gerenciamento de dependências)
-* Uvicorn
+### 🔑 Auth
+
+- `POST /auth/register` → Criar usuário  
+- `POST /auth/login` → Login e geração de token  
+- `GET /auth/me` → Usuário autenticado  
+
+### ✅ Tasks (protegido)
+
+- `POST /tasks` → Criar tarefa  
+- `GET /tasks` → Listar tarefas do usuário  
+- `PUT /tasks/{id}` → Atualizar tarefa  
+- `DELETE /tasks/{id}` → Deletar tarefa  
 
 ---
 
-## 📁 Estrutura do Projeto
+## 🔒 Autenticação
+
+A API utiliza JWT (JSON Web Token).
+
+### Passos:
+
+1. Faça login em `/auth/login`
+2. Copie o token retornado
+3. Clique em **Authorize** no Swagger
+4. Use o formato:
 
 ```
-app/
-├── crud/
-├── models/
-├── routers/
-├── schemas/
-├── core/
-├── database/
-└── main.py
+Bearer SEU_TOKEN
 ```
 
 ---
 
-## 🔐 Autenticação
-
-A autenticação é feita via **JWT (JSON Web Token)**.
-
-Fluxo:
-
-1. Usuário se registra
-2. Faz login
-3. Recebe um token
-4. Usa o token para acessar rotas protegidas
-
----
-
-## 📌 Funcionalidades
-
-### 👤 Usuários
-
-* [x] Registro de usuário
-* [x] Login
-* [x] Obter usuário autenticado (`/me`)
-
-### ✅ Tarefas
-
-* [x] Criar tarefa
-* [x] Listar tarefas do usuário
-* [x] Atualizar tarefa
-* [x] Deletar tarefa
-
----
-
-## ▶️ Como rodar o projeto
-
-### 1. Clone o repositório
+## 🛠️ Como rodar o projeto
 
 ```bash
+# Clonar repositório
 git clone https://github.com/RobertoJr98/task-manager-api.git
+
+# Entrar na pasta
 cd task-manager-api
-```
 
----
-
-### 2. Instale as dependências
-
-```bash
+# Instalar dependências
 poetry install
-```
 
----
-
-### 3. Ative o ambiente
-
-```bash
-poetry shell
-```
-
----
-
-### 4. Execute a aplicação
-
-```bash
+# Rodar aplicação
 poetry run uvicorn app.main:app --reload
 ```
 
 ---
 
-## 📍 Acesse a documentação
+## ⚙️ Variáveis de ambiente
 
-* Swagger UI: http://127.0.0.1:8000/docs
-* Redoc: http://127.0.0.1:8000/redoc
+Crie um arquivo `.env` na raiz do projeto:
 
----
-
-## 🧠 Boas práticas aplicadas
-
-* Arquitetura modular
-* Separação em camadas (Router, Service/CRUD, Schema)
-* Validação de dados com Pydantic
-* Uso de dependências com FastAPI
-* Código organizado e escalável
+```env
+DATABASE_URL=postgresql+psycopg2://user:password@localhost:5432/db_name
+SECRET_KEY=sua_chave_secreta
+DEBUG=True
+```
 
 ---
 
-## 🚧 Próximas melhorias
+## 📦 Banco de dados
 
-* [ ] Deploy em produção (Render / Railway)
-* [ ] Dockerização
-* [ ] Banco PostgreSQL
-* [ ] Testes automatizados (Pytest)
-* [ ] Refresh Token
-* [ ] Permissões e roles
+- PostgreSQL
+- Migrations com Alembic
+
+```bash
+alembic upgrade head
+```
+
+---
+
+## 🧪 Testes (em desenvolvimento)
+
+```bash
+pytest
+```
+
+---
+
+## 📈 Melhorias futuras
+
+- Testes automatizados completos
+- Dockerização
+- CI/CD
+- Paginação de tarefas
+- Refresh Token
+- Rate limiting
 
 ---
 
 ## 👨‍💻 Autor
 
 **Roberto Barboza da Silva Junior**
-🔗 https://github.com/RobertoJr98
+
+- GitHub: https://github.com/RobertoJr98
 
 ---
 
-## 📄 Licença
+## 💡 Sobre o projeto
 
-Este projeto está sob a licença MIT.
+Este projeto foi desenvolvido com foco em prática real de backend, aplicando conceitos como:
+
+- Arquitetura em camadas (routers, services, models)
+- Autenticação segura com JWT
+- Integração com banco de dados relacional
+- Deploy em ambiente cloud (Render)
